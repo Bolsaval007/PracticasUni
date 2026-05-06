@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
+
 export default function MenuScreen() {
   return (
     <View style={s.c}>
       <Text style={s.t}>Menú</Text>
-      <Text style={s.sub}>Aquí irá el menú del estudiante</Text>
+      <Text style={s.sub}>Aquí irá el menú del estudiantelol</Text>
     </View>
   );
 }

@@ -1,62 +1,121 @@
 import {
-  View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, Image
-} from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../../supabase.config';
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../../supabase.config";
+import { useState } from "react";
+import React from "react";
+import { FAB, Portal } from "react-native-paper";
+
+/* ── AVATAR COMPONENT ── */
+const Avatar = ({ nombre, apellido, foto }) => {
+  const getInitials = () => {
+    const n = nombre?.trim() || "";
+    const a = apellido?.trim() || "";
+    return (n[0] + (a[0] || "")).toUpperCase() || "U";
+  };
+
+  if (foto) {
+    return (
+      <Image
+        source={{ uri: foto }}
+        style={{ width: 56, height: 56, borderRadius: 28 }}
+      />
+    );
+  }
+
+  return (
+    <View
+      style={{
+        width: 56,
+        height: 56,
+        borderRadius: 28,
+        backgroundColor: "#3DAB7B",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
+        {getInitials()}
+      </Text>
+    </View>
+  );
+};
+
+
 
 const postulaciones = [
-  { id: '1', nombre: 'Glide', color: '#F0F0F0', letra: 'G', letraColor: '#333', acento: '#F5A842' },
-  { id: '2', nombre: 'Amazon', color: '#F5A842', letra: 'a', letraColor: '#1A1A1A', acento: '#1A1A1A' },
-  { id: '3', nombre: 'Zeroazul', color: '#E8547A', letra: 'Z', letraColor: '#FFFFFF', acento: '#FFFFFF' },
+  { id: "1", nombre: "Glide", color: "#F0F0F0", letra: "G", letraColor: "#333", acento: "#F5A842" },
+  { id: "2", nombre: "Amazon", color: "#F5A842", letra: "a", letraColor: "#1A1A1A", acento: "#1A1A1A" },
+  { id: "3", nombre: "Zeroazul", color: "#E8547A", letra: "Z", letraColor: "#FFFFFF", acento: "#FFFFFF" },
 ];
 
 export default function DashboardScreen({ navigation }) {
   const { perfil } = useAuth();
 
+  const [menuVisible, setMenuVisible] = React.useState(false);
+
   const handleLogout = async () => {
+  try {
+    setMenuVisible(false);
+
     await supabase.auth.signOut();
-    navigation.replace('Login');
+
+    // NO navegues manualmente
+    // RootNavigator detecta user = null y cambia a AuthNavigator
+  } catch (error) {
+    console.log("Error al cerrar sesión:", error);
+  }
+};
+
+  const capitalizeWords = (text) => {
+    if (!text) return "";
+
+    return text
+      .toLowerCase()
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
+
+  const [open, setOpen] = React.useState(false);
+  const onStateChange = ({ open }) => setOpen(open);
 
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
 
-      {/* BOTÓN SALIR */}
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={{ position: 'absolute', top: 50, right: 20, zIndex: 10 }}
-      >
-        <Text style={{ color: '#E8547A', fontWeight: '700' }}>
-          Salir
-        </Text>
-      </TouchableOpacity>
-
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
         {/* ── HEADER ── */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-
-            {/* 👇 CAMBIO PRINCIPAL */}
             <Text style={styles.saludo}>
-              Hola, {perfil?.nombre || 'Estudiante'} 👋
+              Hola, {perfil?.nombre || "Estudiante"} 👋
             </Text>
 
             <Text style={styles.heroText}>
-              Todo listo para{'\n'}
-              <Text style={styles.heroGreen}>comenzar tu{'\n'}práctica</Text>
+              Todo listo para{"\n"}
+              <Text style={styles.heroGreen}>
+                comenzar tu{"\n"}práctica
+              </Text>
             </Text>
           </View>
 
-          <View style={styles.avatarContainer}>
-            <Text style={styles.avatarEmoji}>🧑‍💼</Text>
-          </View>
+          {/* AVATAR CON MENU */}
+          <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
+            <Avatar
+              nombre={perfil?.nombre}
+              apellido={perfil?.apellido}
+              foto={perfil?.foto_url}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* ── POSTULACIONES ── */}
@@ -90,7 +149,6 @@ export default function DashboardScreen({ navigation }) {
         {/* ── ENTREVISTAS ── */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Entrevistas</Text>
-          <Text style={styles.sectionSub}>Tienes las siguientes entrevistas</Text>
 
           <View style={styles.entrevistaCard}>
             <View style={styles.entrevistaLeft}>
@@ -116,14 +174,117 @@ export default function DashboardScreen({ navigation }) {
               <View style={styles.entrevistaLogoDot} />
             </View>
           </View>
-
         </View>
 
       </ScrollView>
+
+      {/* ── MENU DESPLEGABLE ── */}
+      {menuVisible && (
+        <>
+          {/* fondo para cerrar */}
+          <TouchableOpacity
+            onPress={() => setMenuVisible(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+
+          {/* menu */}
+          <View
+            style={{
+              position: "absolute",
+              top: 120,
+              right: 20,
+              backgroundColor: "white",
+              padding: 15,
+              borderRadius: 12,
+              width: 240,
+              elevation: 5,
+              zIndex: 999,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+              {capitalizeWords(perfil?.nombre)} {capitalizeWords(perfil?.apellido)}
+            </Text>
+
+            <Text>Carrera: {perfil?.carrera || "No registrada"}</Text>
+            <Text>Semestre: {perfil?.semestre || "N/A"}</Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                setMenuVisible(false);
+                navigation.navigate("Perfil");
+              }}
+              style={{
+                marginTop: 10,
+                backgroundColor: "#3DAB7B",
+                padding: 10,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Perfil
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={{
+                marginTop: 10,
+                backgroundColor: "#E8547A",
+                padding: 10,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Cerrar sesión
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+      <Portal>
+        <FAB.Group
+          open={open}
+          visible
+          icon={open ? "close" : "menu"}
+          color="white"
+          fabStyle={{
+            backgroundColor: "#000",
+            width: 70,
+            height: 70,
+            borderRadius: 35,
+          }}
+          actions={[
+            {
+              icon: "home",
+              label: "Inicio",
+              onPress: () => navigation.navigate("Inicio"),
+            },
+            {
+              icon: "account-clock",
+              label: "Procesos",
+              onPress: () => navigation.navigate("Procesos"),
+            },
+            {
+              icon: "menu",
+              label: "Menú",
+              onPress: () => console.log("Menu"),
+            },
+          ]}
+          onStateChange={onStateChange}
+          onPress={() => {
+            if (open) setOpen(false);
+          }}
+        />
+      </Portal>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
