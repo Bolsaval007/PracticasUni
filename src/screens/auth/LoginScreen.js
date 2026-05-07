@@ -5,6 +5,9 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../../supabase.config';
+import logoCreator_imagetologo from "../../../assets/logoCreator_imagetologo.png";
+import Component2 from "../../../assets/Component2.png";
+import { Image } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
   const [correo, setCorreo] = useState('');
@@ -51,9 +54,12 @@ export default function LoginScreen({ navigation }) {
         keyboardShouldPersistTaps="handled"
       >
         {/* LOGO */}
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoIcon}>🎓</Text>
-          <Text style={styles.logoText}>Emprax</Text>
+        <View style={styles.topLogoContainer}>
+          <Image
+            source={Component2}
+            style={styles.topLogo}
+            resizeMode="contain"
+          />
         </View>
 
         {/* CARD */}
@@ -116,18 +122,13 @@ export default function LoginScreen({ navigation }) {
             <View style={styles.dividerLine} />
           </View>
 
-          <View style={styles.socialRow}>
-            <TouchableOpacity style={[styles.socialBtn, { backgroundColor: '#5B6FB5' }]}>
-              <Text style={styles.socialIcon}>f</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.socialBtn, { backgroundColor: '#3DAB7B' }]}>
-              <Text style={styles.socialIcon}>G</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.socialBtn, { backgroundColor: '#E8547A' }]}>
-              <Text style={styles.socialIcon}>o</Text>
-            </TouchableOpacity>
+          <View style={styles.logoContainer}>
+            <Image
+              source={logoCreator_imagetologo}
+              style={styles.loginLogo}
+              resizeMode="contain"
+            />
           </View>
-
           <TouchableOpacity
             style={styles.registerLink}
             onPress={() => navigation.navigate('Register')}
@@ -154,24 +155,17 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
-  /* ── LOGO ── */
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 64,
-    marginBottom: 28,
-  },
-  logoIcon: {
-    fontSize: 26,
-    marginRight: 6,
-  },
-  logoText: {
-    fontSize: 34,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    letterSpacing: -1,
-  },
+  /* ── LOGO SUPERIOR ── */
+topLogoContainer: {
+  alignItems: 'center',
+  marginTop: 50, // 🔥 baja el logo superior
+  marginBottom: 35,
+},
+
+topLogo: {
+  width: 180,
+  height: 80,
+},
 
   /* ── CARD ── */
   card: {
@@ -299,23 +293,14 @@ const styles = StyleSheet.create({
   },
 
   /* ── SOCIAL ── */
-  socialRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 20,
-    marginBottom: 24,
-  },
-  socialBtn: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    justifyContent: 'center',
+  logoContainer: {
     alignItems: 'center',
+    marginVertical: 20,
   },
-  socialIcon: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: '700',
+
+  loginLogo: {
+    width: 105,
+    height: 105,
   },
 
   /* ── REGISTRO ── */
@@ -327,3 +312,4 @@ const styles = StyleSheet.create({
     color: '#888',
   },
 });
+

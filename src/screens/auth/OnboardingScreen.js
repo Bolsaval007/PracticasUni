@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Image
 import { StatusBar } from 'expo-status-bar';
 import Component2 from "../../../assets/Component2.png";
 import lol from "../../../assets/lol.png";
+import { Ionicons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,11 +35,14 @@ export default function OnboardingScreen({ navigation }) {
           onPress={() => navigation.navigate('Login')}
           activeOpacity={0.85}
         >
-          <Text style={styles.arrowIcon}>→</Text>
+          <Text style={styles.arrowIcon}>⟶</Text>
         </TouchableOpacity>
 
         {/* Ilustración — reemplaza con tu imagen 3D */}
-        <View style={styles.illustrationContainer}>
+        <View
+          style={styles.illustrationContainer}
+          pointerEvents="none"
+        >
           <Image
             source={lol}
             style={styles.illustrationImage}
@@ -74,23 +78,6 @@ export default function OnboardingScreen({ navigation }) {
 
         </View>
 
-        {/* Botones de acceso */}
-        <TouchableOpacity
-          style={styles.btnPrimary}
-          onPress={() => navigation.navigate('Login')}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.btnPrimaryText}>Iniciar sesión</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.btnSecondary}
-          onPress={() => navigation.navigate('Register')}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.btnSecondaryText}>Crear cuenta</Text>
-        </TouchableOpacity>
-
       </View>
     </ScrollView>
   );
@@ -114,6 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+    marginTop: -40,
   },
   logoIcon: {
     fontSize: 28,
@@ -126,19 +114,19 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   logoImage: {
-  width: 180,
-  height: 70,
-},
+    width: 220,
+    height: 100,
+  },
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#3A2A20',
     lineHeight: 22,
-    maxWidth: '65%',
+    maxWidth: '50%',
     marginBottom: 28,
   },
   arrowBtn: {
-    width: 56,
-    height: 56,
+    width: 100,
+    height: 40,
     borderRadius: 28,
     backgroundColor: '#F5C842',
     justifyContent: 'center',
@@ -146,18 +134,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   arrowIcon: {
-    fontSize: 22,
+    fontSize: 23,
     color: '#1A1A1A',
     fontWeight: '700',
   },
   illustrationContainer: {
     alignItems: 'flex-end',
-    marginTop: -20,
+    marginTop: -200, // 🔥 sube la ilustración
+    marginRight: -120, // 🔥 mueve hacia la derecha
   },
   illustrationImage: {
-  width: 260,
-  height: 260,
-},
+    width: 450,
+    height: 450,
+  },
 
   /* ── BOTTOM ── */
   bottomSection: {
@@ -166,11 +155,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     paddingTop: 36,
     paddingHorizontal: 28,
-    paddingBottom: 48,
-    marginTop: -24,
+    paddingBottom: 5,
+    marginTop: 15,
   },
   tagline: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#999',
     textAlign: 'center',
     marginBottom: 6,

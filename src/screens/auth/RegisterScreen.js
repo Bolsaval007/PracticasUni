@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from '../../../supabase.config';
+import Component2 from "../../../assets/Component2.png";
+import { Image } from 'react-native';
 
 export default function RegisterScreen({ navigation }) {
   const [correo, setCorreo] = useState('');
@@ -13,26 +15,26 @@ export default function RegisterScreen({ navigation }) {
   const [cargando, setCargando] = useState(false);
 
   const handleRegister = async () => {
-  if (!correo || !contrasena || !confirmar) return;
+    if (!correo || !contrasena || !confirmar) return;
 
-  if (contrasena !== confirmar) {
-    Alert.alert('Error', 'Las contrasenas no coinciden');
-    return;
-  }
+    if (contrasena !== confirmar) {
+      Alert.alert('Error', 'Las contrasenas no coinciden');
+      return;
+    }
 
-  setCargando(true);
+    setCargando(true);
 
-  const { error } = await supabase.auth.signUp({
-    email: correo.trim(),
-    password: contrasena,
-  });
+    const { error } = await supabase.auth.signUp({
+      email: correo.trim(),
+      password: contrasena,
+    });
 
-  if (error) {
-    Alert.alert('Error', error.message);
-  }
+    if (error) {
+      Alert.alert('Error', error.message);
+    }
 
-  setCargando(false);
-};
+    setCargando(false);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -46,9 +48,12 @@ export default function RegisterScreen({ navigation }) {
         keyboardShouldPersistTaps="handled"
       >
         {/* LOGO */}
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoIcon}>🎓</Text>
-          <Text style={styles.logoText}>Emprax</Text>
+        <View style={styles.topLogoContainer}>
+          <Image
+            source={Component2}
+            style={styles.topLogo}
+            resizeMode="contain"
+          />
         </View>
 
         {/* CARD */}
@@ -134,24 +139,17 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
-  /* ── LOGO ── */
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 64,
-    marginBottom: 28,
-  },
-  logoIcon: {
-    fontSize: 26,
-    marginRight: 6,
-  },
-  logoText: {
-    fontSize: 34,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    letterSpacing: -1,
-  },
+  /* ── LOGO SUPERIOR ── */
+topLogoContainer: {
+  alignItems: 'center',
+  marginTop: 50, // 🔥 baja el logo superior
+  marginBottom: 35,
+},
+
+topLogo: {
+  width: 180,
+  height: 80,
+},
 
   /* ── CARD ── */
   card: {
