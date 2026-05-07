@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import Component2 from "../../../assets/Component2.png";
+import lol from "../../../assets/lol.png";
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,8 +15,11 @@ export default function OnboardingScreen({ navigation }) {
 
         {/* Logo */}
         <View style={styles.logoRow}>
-          <Text style={styles.logoIcon}>🎓</Text>
-          <Text style={styles.logoText}>Emprax</Text>
+          <Image
+            source={Component2}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Subtítulo */}
@@ -34,9 +39,11 @@ export default function OnboardingScreen({ navigation }) {
 
         {/* Ilustración — reemplaza con tu imagen 3D */}
         <View style={styles.illustrationContainer}>
-          <View style={styles.illustrationPlaceholder}>
-            <Text style={styles.illustrationEmoji}>🧑‍💻</Text>
-          </View>
+          <Image
+            source={lol}
+            style={styles.illustrationImage}
+            resizeMode="contain"
+          />
         </View>
 
       </View>
@@ -118,6 +125,10 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     letterSpacing: -1,
   },
+  logoImage: {
+  width: 180,
+  height: 70,
+},
   subtitle: {
     fontSize: 14,
     color: '#3A2A20',
@@ -143,15 +154,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: -20,
   },
-  illustrationPlaceholder: {
-    width: 180,
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  illustrationEmoji: {
-    fontSize: 120,
-  },
+  illustrationImage: {
+  width: 260,
+  height: 260,
+},
 
   /* ── BOTTOM ── */
   bottomSection: {
