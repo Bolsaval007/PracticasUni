@@ -15,26 +15,64 @@ export default function RegisterScreen({ navigation }) {
   const [cargando, setCargando] = useState(false);
 
   const handleRegister = async () => {
-    if (!correo || !contrasena || !confirmar) return;
+  if (!correo || !contrasena || !confirmar) {
+    Alert.alert("Error", "Completa todos los campos");
+    return;
+  }
 
-    if (contrasena !== confirmar) {
-      Alert.alert('Error', 'Las contrasenas no coinciden');
-      return;
-    }
+  if (contrasena !== confirmar) {
+    Alert.alert("Error", "Las contraseñas no coinciden");
+    return;
+  }
 
-    setCargando(true);
+  setCargando(true);
 
-    const { error } = await supabase.auth.signUp({
+  try {
+    // 1. Crear usuario en Auth
+    const { data, error } = await supabase.auth.signUp({
       email: correo.trim(),
       password: contrasena,
     });
 
-    if (error) {
-      Alert.alert('Error', error.message);
+    if (error) throw error;
+
+    const user = data?.user;
+
+    if (!user) {
+      throw new Error("No se pudo crear el usuario");
     }
 
-    setCargando(false);
-  };
+    // 2. Insertar automáticamente en tabla estudiante
+    const { error: insertError } = await supabase
+      .from("estudiante")
+      .insert({
+        id_estudiante: user.id,
+        correo: correo.trim(),
+        rol: "estudiante",
+        estado_practica: "sin_prctica",
+      });
+
+    if (insertError) {
+      console.log("ERROR INSERT:", insertError);
+      throw insertError;
+    }
+
+    Alert.alert(
+      "Éxito",
+      "Cuenta creada correctamente"
+    );
+
+  } catch (error) {
+    console.log("ERROR REGISTER:", error);
+
+    Alert.alert(
+      "Error",
+      error.message || "No se pudo registrar"
+    );
+  }
+
+  setCargando(false);
+};
 
   return (
     <KeyboardAvoidingView

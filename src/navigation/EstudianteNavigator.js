@@ -6,6 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 import DashboardScreen from "../screens/estudiante/DashboardScreen";
 import ProcesosScreen from "../screens/estudiante/ProcesosScreen";
 import MenuScreen from "../screens/estudiante/MenuScreen";
+import InicioScreen from "../screens/estudiante/InicioScreen";
+import PerfilScreen from "../screens/estudiante/PerfilScreen";
 
 import { FAB, Portal, PaperProvider } from "react-native-paper";
 
@@ -48,9 +50,10 @@ export default function EstudianteNavigator() {
             },
           }}
         >
-          <Tab.Screen name="Inicio" component={DashboardScreen} />
-          <Tab.Screen name="Procesos" component={ProcesosScreen} />
+          <Tab.Screen name="Inicio" component={InicioScreen} />
+          <Tab.Screen name="Procesos" component={DashboardScreen} />
           <Tab.Screen name="Menu" component={MenuScreen} />
+          <Tab.Screen name="Perfil"component={PerfilScreen}/>
         </Tab.Navigator>
 
         {/* ── FAB DESPLEGABLE ── */}
