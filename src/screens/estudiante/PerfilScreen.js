@@ -17,7 +17,8 @@ import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../../../supabase.config";
 import { useAuth } from "../../context/AuthContext";
 
-export default function PerfilScreen() {
+
+export default function PerfilScreen({ navigation }) {
   const { perfil, user, setPerfil } = useAuth();
 
   const [nombre, setNombre] = useState("");
@@ -110,9 +111,16 @@ export default function PerfilScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <StatusBar style="dark" />
-      
+
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Procesos")}
+          style={styles.backButton}
+        >
+          <Ionicons name="arrow-back" size={28} color="#1A1A1A" />
+        </TouchableOpacity>
+
         <View style={styles.headerContent}>
           <Text style={styles.headerTitle}>Mi Perfil</Text>
           <Text style={styles.headerSubtitle}>
@@ -148,7 +156,7 @@ export default function PerfilScreen() {
 
         {/* Formulario */}
         <View style={styles.form}>
-          
+
           {/* Nombre */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Nombre</Text>
@@ -307,6 +315,12 @@ const styles = StyleSheet.create({
   headerContent: {
     alignItems: 'center',
   },
+  backButton: {
+  position: 'absolute',
+  left: 24,
+  top: 60,
+  zIndex: 10,
+},
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',

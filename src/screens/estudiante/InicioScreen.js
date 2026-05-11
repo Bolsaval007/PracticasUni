@@ -115,6 +115,7 @@ export default function InicioScreen({ navigation }) {
             key={oferta.id}
             style={styles.ofertaCard}
             activeOpacity={0.7}
+            onPress={() => navigation.navigate('DetallePractica', { oferta })}
           >
             {/* Badge destacada */}
             {oferta.destacada && (
